@@ -1,0 +1,158 @@
+
+
+/* 1 */
+
+:root {
+  /* Base Colors */
+  --primary: #3b82f6;           /* Vibrant Blue (for buttons, highlights) */
+  --primary-light: #e0f2fe;     /* Soft Blue BG */
+  --primary-dark: #1e40af;
+
+  --accent: #14b8a6;            /* Teal for success/positive action */
+  --accent-light: #ccfbf1;
+
+  --danger: #ef4444;            /* Clear red for errors */
+  --warning: #f59e0b;           /* Amber for alerts */
+  --info: #0ea5e9;              /* Sky blue for info */
+
+  /* Text Colors */
+  --text-color: #1e293b;        /* Slate-800 (strong but not harsh) */
+  --text-muted: #64748b;        /* Slate-500 */
+  --text-light: #f8fafc;
+
+  /* Backgrounds */
+  --bg-main: #f8fafc;           /* Very light slate/cool white */
+  --bg-card: #ffffff;           /* Pure white */
+  --bg-alt: #f1f5f9;            /* Slight gray-blue tone */
+
+  /* Border & Radius */
+  --border-color: #e2e8f0;      /* Light slate border */
+  --border-radius: 12px;
+
+  /* Shadow */
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* DARK MODE */
+body.dark-mode {
+  --primary: #60a5fa;
+  --accent: #2dd4bf;
+  --danger: #f87171;
+  --warning: #fbbf24;
+  --info: #38bdf8;
+
+  --text-color: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-light: #ffffff;
+
+  --bg-main: #0f172a;          /* Dark slate */
+  --bg-card: #1e293b;
+  --bg-alt: #334155;
+
+  --border-color: #475569;
+}
+
+/* 2 */
+
+:root {
+  /* Base Colors: Monotonic, Energetic Blue-Violet */
+  --primary: #6366f1;           /* Energetic Indigo */
+  --primary-light: #e0e7ff;     /* Soft Indigo BG */
+  --primary-dark: #3730a3;      /* Deep Indigo */
+
+  --accent: #7c3aed;            /* Vivid Violet for accents */
+  --accent-light: #ede9fe;      /* Light Violet BG */
+
+  --danger: #ef4444;            /* Red for errors (kept for clarity) */
+  --warning: #f59e42;           /* Orange for alerts (slightly muted) */
+  --info: #3b82f6;              /* Blue for info (matches monotone) */
+
+  /* Text Colors */
+  --text-color: #312e81;        /* Deep Indigo for strong text */
+  --text-muted: #6366f1;        /* Indigo for muted text */
+  --text-light: #f8fafc;        /* Very light for contrast */
+
+  /* Backgrounds */
+  --bg-main: #f5f3ff;           /* Light violet/indigo */
+  --bg-card: #fff;              /* Pure white for cards */
+  --bg-alt: #e0e7ff;            /* Indigo-tinted light BG */
+
+  /* Border & Radius */
+  --border-color: #c7d2fe;      /* Indigo border */
+  --border-radius: 14px;
+
+  /* Shadow */
+  --shadow: 0 4px 16px rgba(99, 102, 241, 0.08);
+}
+
+/* DARK MODE */
+body.dark-mode {
+  --primary: #818cf8;           /* Lighter Indigo */
+  --accent: #a78bfa;            /* Soft Violet */
+  --danger: #f87171;
+  --warning: #fbbf24;
+  --info: #60a5fa;
+
+  --text-color: #f3f4f6;        /* Light for dark backgrounds */
+  --text-muted: #a5b4fc;        /* Muted Indigo */
+  --text-light: #fff;
+
+  --bg-main: #18181b;           /* Very dark indigo/gray */
+  --bg-card: #27272a;           /* Dark card */
+  --bg-alt: #312e81;            /* Deep Indigo */
+
+  --border-color: #6366f1;
+}
+
+/* //3 */
+
+
+:root {
+  /* Base Colors: Monotonic, Energetic Blue/Cyan */
+  --primary: #06b6d4;           /* Energetic Cyan */
+  --primary-light: #e0f7fa;     /* Soft Cyan BG */
+  --primary-dark: #0e7490;      /* Deep Cyan */
+
+  --accent: #0284c7;            /* Vivid Blue for accents */
+  --accent-light: #bae6fd;      /* Light Blue BG */
+
+  --danger: #ef4444;            /* Red for errors */
+  --warning: #f59e42;           /* Orange for alerts */
+  --info: #0ea5e9;              /* Sky blue for info */
+
+  /* Text Colors */
+  --text-color: #0f172a;        /* Deep blue-gray for strong text */
+  --text-muted: #38bdf8;        /* Muted blue for secondary text */
+  --text-light: #f8fafc;        /* Very light for contrast */
+
+  /* Backgrounds */
+  --bg-main: #f0f9ff;           /* Very light cyan/blue */
+  --bg-card: #ffffff;           /* Pure white for cards */
+  --bg-alt: #e0f2fe;            /* Blue-tinted light BG */
+
+  /* Border & Radius */
+  --border-color: #7dd3fc;      /* Light blue border */
+  --border-radius: 14px;
+
+  /* Shadow */
+  --shadow: 0 4px 16px rgba(6, 182, 212, 0.08);
+}
+
+/* DARK MODE */
+body.dark-mode {
+  --primary: #22d3ee;           /* Lighter Cyan */
+  --accent: #38bdf8;            /* Soft Blue */
+  --danger: #f87171;
+  --warning: #fbbf24;
+  --info: #38bdf8;
+
+  --text-color: #f3f4f6;        /* Light for dark backgrounds */
+  --text-muted: #7dd3fc;        /* Muted blue */
+  --text-light: #fff;
+
+  --bg-main: #0f172a;           /* Very dark blue */
+  --bg-card: #1e293b;           /* Dark card */
+  --bg-alt: #164e63;            /* Deep cyan */
+
+  --border-color: #38bdf8;
+}

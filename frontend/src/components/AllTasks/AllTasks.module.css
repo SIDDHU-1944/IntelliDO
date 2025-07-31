@@ -1,0 +1,222 @@
+@import "../../vars.css";
+
+
+/* HomeMain.module.css */
+.HomeMaincontainer {
+  flex: 1;
+  padding-inline: 2rem;
+  padding-block: 20px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: var(--bg-main);
+  height: 100vh;
+}
+
+.taskMain {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  animation: fadeIn 0.5s;
+}
+
+.taskContainer {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  transition: background 0.2s;
+}
+
+.taskContainer ul {
+  margin: 0;
+  padding: 0;
+}
+
+.dayRow {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+  height: 150px;
+  max-height: 300px;
+}
+
+.dayCard {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(25, 118, 210, 0.10);
+  padding: 24px 32px;
+  min-width: 320px;
+  /* max-width: 600px; */
+  height: 100%;
+  flex: 1;
+  overflow-y: scroll;
+}
+
+.listsCard {
+  background: #f7fafd;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.06);
+  padding: 24px 20px;
+  min-width: 200px;
+  /* max-width: 300px; */
+  height: 100%;
+  flex: 2;
+  overflow-y: scroll;
+}
+
+/* Add to AllTasks.module.css */
+
+.dayCard,
+.listsCard {
+  /* ...existing styles... */
+  scrollbar-width: thin;
+  scrollbar-color: #e3e7ee #f7fafd;
+}
+
+.dayCard::-webkit-scrollbar,
+.listsCard::-webkit-scrollbar {
+  width: 2px;
+  background: #f7fafd;
+  border-radius: 8px;
+}
+
+.dayCard::-webkit-scrollbar-thumb,
+.listsCard::-webkit-scrollbar-thumb {
+  background: #e3e7ee;
+  border-radius: 8px;
+}
+
+.dayCard::-webkit-scrollbar-thumb:hover,
+.listsCard::-webkit-scrollbar-thumb:hover {
+  background: #d0d7e6;
+}
+
+.taskItem {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  margin: 12px 0;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: box-shadow 0.2s, background 0.2s;
+  list-style: none;
+}
+
+.taskItem:hover {
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.15);
+  background: #f7fafd;
+}
+
+.taskItem button {
+  margin-right: 12px;
+}
+
+.taskItem p {
+  flex: 1;
+  margin: 0 12px;
+  font-size: 1rem;
+  color: #222;
+  word-break: break-word;
+}
+
+.taskItem h5 {
+  margin: 0 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.taskContainer li {
+  background: #f5f6fa;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 1px 4px rgba(25, 118, 210, 0.04) !important;
+  animation: slideIn 0.3s;
+}
+
+.taskContainer li:hover {
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.10) !important;
+  background: #e3f2fd !important;
+}
+
+.taskMain h1 {
+  color: var(--primary);
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.taskMain h2 {
+  color: var(--primary);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.taskMain h3 {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.taskContainer button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: transform 0.1s;
+}
+
+.taskContainer button:active {
+  transform: scale(0.92);
+}
+
+.done {
+  color: var(--accent);
+  text-decoration: line-through;
+  font-weight: 500;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+
+.pending {
+  color: var(--danger);
+  font-weight: 500;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-30px);}
+  to { opacity: 1; transform: translateX(0);}
+}
+
+
+@media (max-width: 700px) {
+  .HomeMaincontainer {
+    padding-inline: 0.5rem;
+    padding-block: 10px;
+  }
+  .taskMain {
+    padding: 1rem;
+  }
+}
+
+
+
+

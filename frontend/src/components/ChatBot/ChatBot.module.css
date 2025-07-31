@@ -1,0 +1,87 @@
+.botButton {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  z-index: 2000;
+  background: linear-gradient(135deg, #06b6d4 60%, #0284c7 100%);
+  border: none;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  box-shadow: 0 4px 24px rgba(6, 182, 212, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.botButton:hover {
+  box-shadow: 0 8px 32px rgba(6, 182, 212, 0.28);
+  transform: scale(1.08);
+}
+
+.botButton img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.MuiDialog-paper {
+  border-radius: 18px !important;
+  padding: 0 0.5rem 1.5rem 0.5rem;
+  background: #f0f9ff !important;
+  min-width: 340px;
+  max-width: 95vw;
+  height: 90vh !important;
+}
+
+.MuiDialogTitle-root {
+  font-weight: 700 !important;
+  color: #0284c7 !important;
+  letter-spacing: 1px;
+}
+
+.input{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.suggestion {
+  /* position: absolute; */
+  top: 100%;
+  left: 0;
+  width: 100%;
+  font-size: 0.95rem;
+  color: #0284c7;
+  margin-top: 0.3rem;
+  cursor: pointer;
+  background: #e0f7fa;
+  border-radius: 8px;
+  padding: 0.3rem 0.7rem;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.08);
+  z-index: 10;
+   transition: background 0.2s;
+}
+
+.suggestion:hover {
+  background: #bae6fd;
+}
+
+@media (max-width: 600px) {
+  .botButton {
+    width: 48px;
+    height: 48px;
+    bottom: 1.2rem;
+    right: 1.2rem;
+  }
+  .botButton img {
+    width: 28px;
+    height: 28px;
+  }
+  /* .MuiDialog-paper {
+    min-width: 90vw;
+    padding: 0 0.2rem 1rem 0.2rem;
+  } */
+}

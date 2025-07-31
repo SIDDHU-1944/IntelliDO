@@ -1,0 +1,17 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+html, body, #root {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+.HomeContainer{
+    height: 100vh;
+    width: 100vw;
+    /* display: flex;
+    align-items: flex-start;
+    justify-content: space-between; */
+}

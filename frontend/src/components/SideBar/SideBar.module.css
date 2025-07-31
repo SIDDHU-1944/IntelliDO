@@ -1,0 +1,195 @@
+/* Hide sidebar by default (closed state) */
+.SideBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 280px;
+  max-width: 90vw;
+  /* background: var(--bg-card, #fff); */
+  background: var(--bg-card);
+  box-shadow: 2px 0 16px rgba(0,0,0,0.18);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  border-radius: 0 20px 20px 0;
+  overflow: hidden;
+  animation: sidebarFadeIn 0.4s;
+}
+
+/* Show sidebar when open */
+.open {
+  transform: translateX(0);
+}
+
+/* Hide sidebar when closed */
+.closed {
+  transform: translateX(-100%);
+}
+
+/* Backdrop for overlay effect */
+.sidebarBackdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.25);
+  /* z-index: 1199; */
+  transition: opacity 0.3s;
+  opacity: 1;
+}
+
+
+
+/* Hide sidebar content when closed (optional, for accessibility) */
+.closed * {
+  display: none !important;
+}
+
+
+/* Sidebar fade-in animation */
+@keyframes sidebarFadeIn {
+  from { opacity: 0; transform: translateX(-30px);}
+  to { opacity: 1; transform: translateX(0);}
+}
+
+
+/* --- Top Section: Avatar & Username --- */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1rem 0.5rem 1rem;
+  border-bottom: 1px solid #e3e7ee;
+  position: relative;
+}
+
+.username {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.Avatar {
+  border: 2px solid var(--primary, #1976d2);
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+  cursor: pointer;
+  transition: border 0.2s;
+}
+
+/* --- Sidebar Buttons --- */
+.bar {
+  border: none;
+  background: transparent;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  color: var(--text-color, #222);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+.bar:hover, .bar:focus {
+  background: var(--primary-light, #e3f2fd);
+  color: var(--primary, #1976d2);
+}
+.addTask {
+  color: var(--accent, #4caf50);
+  font-weight: bold;
+}
+
+/* --- Section Titles & Dividers --- */
+.utils p, .workspace p, .lists p {
+  margin: 0.5rem 0 0.5rem 1rem;
+  color: var(--primary, #1976d2);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+hr {
+  border: none;
+  border-top: 1px solid #e3e7ee;
+  margin: 0.5rem 0;
+}
+
+/* --- Lists Section --- */
+.lists {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+  margin-inline: 5px;
+}
+.lists .bar {
+  color: var(--text-color, #222);
+  font-size: 1rem;
+  justify-content: flex-start;
+}
+.lists .bar:hover {
+  background: #f0f7ff;
+  color: var(--primary, #1976d2);
+}
+
+/* --- New List Button --- */
+.newList {
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  margin: 1rem;
+  padding: 0.7rem 1rem;
+  background: var(--primary-light, #e3f2fd);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.newList div{
+  display: flex;
+  align-items: center;
+}
+
+.newList:hover {
+  background: #bbdefb;
+}
+
+/* --- Scrollbar Styling for Lists --- */
+.lists {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary, #1976d2) #e3e7ee;
+}
+.lists::-webkit-scrollbar {
+  width: 6px;
+}
+.lists::-webkit-scrollbar-thumb {
+  background: var(--primary, #1976d2);
+  border-radius: 6px;
+}
+.lists::-webkit-scrollbar-track {
+  background: #e3e7ee;
+}
+
+/* --- Responsive: Sidebar width on small screens (already present) --- */
+@media (max-width: 800px) {
+  .SideBar {
+    position: fixed;
+    width: 30vw;
+    max-width: 90vw;
+    min-width: 0;
+    border-radius: 0 16px 16px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .SideBar {
+    position: fixed;
+    width: 50vw;
+    max-width: 90vw;
+    min-width: 0;
+    border-radius: 0 16px 16px 0;
+  }
+}
