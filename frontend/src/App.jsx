@@ -6,7 +6,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import AuthProvider from "./context/AuthProvider";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import RedirectRoute from "./utils/redirect";
+import RedirectRoute from "./utils/Redirect.jsx";
 import All from "./pages/All";
 
 
