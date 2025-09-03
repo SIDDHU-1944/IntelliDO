@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useCallback } from "react";
 import AuthContext from "../../context/AuthContext";
-import styles from "./chatBot.module.css";
+import styles from "./ChatBot.module.css";
 
 import { TextField, Dialog, DialogTitle, IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
