@@ -4,9 +4,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import httpStatus from "http-status";
 import LoadingPage from "../pages/loading";
+import server from "../utils/environment";
 
 const Client = axios.create({
-  baseURL: "http://localhost:3000/api/v1/users",
+  baseURL: `${server}/api/v1/users`,
   withCredentials: true,
 });
 

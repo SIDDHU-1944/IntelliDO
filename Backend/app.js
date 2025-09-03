@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import userRoutes from "./src/routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import client from "./src/utils/environment.js";
 
 dotenv.config()
 
@@ -13,7 +14,7 @@ const app = express();
 
 app.set("port", process.env.PORT || 3000);
 app.use(cors({
-  origin: "http://localhost:5173", // your frontend URL
+  origin: client, // your frontend URL
   credentials: true
 }))
 app.use(express.json());
