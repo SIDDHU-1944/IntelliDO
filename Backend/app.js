@@ -7,10 +7,15 @@ import userRoutes from "./src/routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import client from "./src/utils/environment.js";
+import path from "path"
+import { fileURLToPath } from "url";
 
 dotenv.config()
 
 const app = express();
+
+const __filename= fileURLToPath(import.meta.url);
+const __dirname= path.dirname(__filename); // in esr dirname is not defined so recreating it.
 
 app.set("port", process.env.PORT || 3000);
 app.use(cors({
