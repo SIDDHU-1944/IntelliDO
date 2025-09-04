@@ -34,6 +34,7 @@ app.get("/", (req,res)=>{
     res.send("hello world!!");
 })
 
+// in express -v >5 "*" is wrong so /.*/ is used
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
