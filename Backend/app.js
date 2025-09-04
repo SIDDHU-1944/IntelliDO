@@ -34,7 +34,7 @@ app.get("/", (req,res)=>{
     res.send("hello world!!");
 })
 
-app.get("*", (req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
 
