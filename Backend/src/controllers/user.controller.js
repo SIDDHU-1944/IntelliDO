@@ -30,8 +30,9 @@ const login = async (req, res) => {
       res
         .cookie("token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax", // Allows cookie across ports on same origin (for localhost)
+          secure: true,
+          // sameSite: "lax", // Allows cookie across ports on same origin (for localhost)
+          sameSite: "none",
           maxAge: 7 * 24 * 60 * 60 * 1000,
         })
         .status(httpStatus.OK)
