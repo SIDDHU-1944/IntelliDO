@@ -184,11 +184,11 @@ const AIsuggestions = async(req,res)=>{
   try {
     const {text} = req.body;
     const response= await getAutoCompletions(text);
-    // console.log("response:",response);
+    console.log("response:",response);
     res.json(response);
   } catch (err) {
     console.log("error:",err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err?.message || "unknown error"});
   }
 }
 
