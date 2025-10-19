@@ -51,8 +51,8 @@ const AuthProvider = ({ children }) => {
 
       if (request.status == httpStatus.OK) {
         let response = await Client.get("/me");
-        const { user, tasks, lists, quote } = response.data;
-        setUserData({ user, tasks, lists, quote });
+        const { user, tasks, lists, quote , progress} = response.data;
+        setUserData({ user, tasks, lists, quote, progress });
         router("/home");
       }
     } catch (err) {

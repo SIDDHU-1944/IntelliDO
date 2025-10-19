@@ -15,9 +15,12 @@ import { Divider } from "@mui/material";
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
+  // if(loading) return <LoadingPage/>
+
   const [count, setCount] = useState(0);
   const [tasks, setTasks] = useState(0);
   const { userData, toggleTaskDone, toggleListDone } = useContext(AuthContext);
+  const [chartData, setChartData] = useState({ dates: [], values: [] });
   const date = new Date();
   const days = [
     "Sunday",
@@ -66,10 +69,18 @@ export default function Home() {
   }, [userData, date]);
 
   //chart
+  useEffect(() => {
+    if (!userData?.progress) return;
 
-  const stats = (userData?.progress || []).filter(
-    (s) => s.percentage !== undefined && !isNaN(s.percentage)
-  );
+    const stats = userData.progress.filter(
+      (s) => s.percentage !== undefined && !isNaN(s.percentage)
+    );
+    const recentStats = stats.slice(-10);
+    const dates = recentStats.map((s) => new Date(s.date).toLocaleDateString());
+    const values = recentStats.map((s) => s.percentage);
+
+    setChartData({ dates, values });
+  }, [userData]);
 
   // const stats = [
   //   { date: "2025-06-10", percentage: 50 },
@@ -79,12 +90,6 @@ export default function Home() {
   //   { date: "2025-06-14", percentage: 90 },
   //   { date: "2025-06-15", percentage: 100 },
   // ];
-  const recentStats = stats.slice(-10);
-  const dates = recentStats.map((s) => new Date(s.date).toLocaleDateString());
-  const values = recentStats.map((s) => s.percentage);
-  {
-    console.log(dates, values);
-  }
 
   return (
     <>
@@ -94,7 +99,13 @@ export default function Home() {
           <div className={styles.quoteContainer}>
             <h1>{days[date.getDay()]}</h1>
             <blockquote>
-              <h3>{userData.quote?.q || "No quote available."}</h3>
+              <h3>
+                {userData?.quote?.q &&
+                userData.quote.q !==
+                  "Too many requests. Obtain an auth key for unlimited access."
+                  ? userData.quote.q
+                  : "No quote available."}
+              </h3>
             </blockquote>
             <footer>-{userData.quote?.a || ""}</footer>
           </div>
@@ -104,19 +115,25 @@ export default function Home() {
             <div style={{ width: "100%", height: "90%" }}>
               {" "}
               {/* Or height: '100%' inside flexbox */}
-              <LineChart
-                xAxis={[
-                  {
-                    data: dates,
-                    scaleType: "point",
-                    label: "Date",
-                  },
-                ]}
-                series={[{ data: values, label: "Completion %" }]}
-                width={undefined} // don't hardcode width here
-                height={undefined}
-                grid={{ vertical: true, horizontal: true }}
-              />
+              {chartData.values && chartData.values.length > 0 ? (
+                <LineChart
+                  xAxis={[
+                    {
+                      data: chartData.dates,
+                      scaleType: "point",
+                      label: "Date",
+                    },
+                  ]}
+                  series={[{ data: chartData.values, label: "Completion %" }]}
+                  width={undefined}
+                  height={undefined}
+                  grid={{ vertical: true, horizontal: true }}
+                />
+              ) : (
+                <p style={{ textAlign: "center", margin: "2rem" }}>
+                  No recent stats to display yet.
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -207,7 +224,7 @@ export default function Home() {
           <div className={styles.scoreCard}>
             <h4>Tasks Done</h4>
             <Gauge
-              value={(count / tasks) * 100}
+              value={tasks > 0 ? (count / tasks) * 100 : 0}
               startAngle={-110}
               endAngle={110}
               sx={{

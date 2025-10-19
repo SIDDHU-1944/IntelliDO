@@ -1,4 +1,4 @@
-const isProd= true
+const isProd= false
 
 const client= isProd? "https://intellido.onrender.com" : "http://localhost:5173";
 
