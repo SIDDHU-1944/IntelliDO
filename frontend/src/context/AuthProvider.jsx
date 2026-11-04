@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import AuthContext from "./AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -11,151 +11,148 @@ const Client = axios.create({
   withCredentials: true,
 });
 
+const mergeMeResponse = (payload) => {
+  const { user, tasks, lists, quote, progress } = payload;
+  return { user, tasks, lists, quote, progress };
+};
+
 const AuthProvider = ({ children }) => {
-  // const authContext = useContext(AuthContext);
   const [userData, setUserData] = useState({});
-  // const [quote, setQuote] = useState(null);
   const [loading, setLoading] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
   const router = useNavigate();
 
-  useEffect(() => {
-  const fetchData = async () => {
-    try {
-      console.log("hello effect1");
-      const res1= await Client.get("/getProgress");
-      console.log(res1.status);
-      const response = await Client.get("/me");
-      const { user, tasks, lists, quote, progress } = response.data;
-      setUserData({ user, tasks, lists, quote, progress });
-    } catch (error) {
-      console.log("error of effect1:",error)
-      setUserData(null);
-    } finally {
-      setLoading(false);
-    }
+  const refreshUserData = async () => {
+    const response = await Client.get("/me");
+    setUserData((prev) => ({ ...prev, ...mergeMeResponse(response.data) }));
   };
-  fetchData();
-}, []);
 
   useEffect(() => {
-    console.log(userData); 
-  }, [userData]);
+    const fetchData = async () => {
+      try {
+        await Client.get("/getProgress");
+        await refreshUserData();
+      } catch (error) {
+        setUserData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleLogin = async (username, password) => {
-    try {
-      let request = await Client.post("/login", {
-        username: username,
-        password: password,
-      });
+    const request = await Client.post("/login", {
+      username,
+      password,
+    });
 
-      if (request.status == httpStatus.OK) {
-        let response = await Client.get("/me");
-        const { user, tasks, lists, quote , progress} = response.data;
-        setUserData({ user, tasks, lists, quote, progress });
-        router("/home");
-      }
-    } catch (err) {
-      throw err;
+    if (request.status === httpStatus.OK) {
+      await refreshUserData();
+      router("/Home");
     }
   };
 
   const handleLogout = async () => {
-    try {
-      await Client.post("/logout");
-      setUserData(null);
-      router("/");
-    } catch (error) {
-      throw error;
-    }
+    await Client.post("/logout");
+    setUserData(null);
+    router("/");
   };
 
   const handleRegister = async (name, username, email, password) => {
-    try {
-      let response = await Client.post("/register", {
-        name: name,
-        username: username,
-        email: email,
-        password: password,
-      });
+    const response = await Client.post("/register", {
+      name,
+      username,
+      email,
+      password,
+    });
 
-      if (
-        response.status == httpStatus.FOUND ||
-        response.status == httpStatus.CREATED
-      ) {
-        router("/login");
-      }
-    } catch (error) {
-      throw error;
+    if (
+      response.status === httpStatus.CONFLICT ||
+      response.status === httpStatus.CREATED
+    ) {
+      router("/login");
     }
   };
 
-  const handleAddTask = async ({ title, due, userId }) => {
-    try {
-      console.log(title, due, userId);
-      let response = await Client.post("/addTask", {
-        title: title,
-        time: due,
-        userId,
-      });
+  const handleAddTask = async ({ title, due }) => {
+    const response = await Client.post("/addTask", {
+      title,
+      time: due,
+    });
 
-      if (response.status == httpStatus.CREATED) {
-        console.log("task created");
-        const updated = await Client.get("/me");
-        const { user, tasks, lists } = updated.data;
-        setUserData({ user, tasks, lists });
-        router("/home");
-      }
-    } catch (error) {
-      throw error;
+    if (response.status === httpStatus.CREATED) {
+      await refreshUserData();
+      router("/Home");
     }
   };
 
-  const toggleTaskDone = (taskId) => {
+  const toggleTaskDone = async (taskId) => {
+    const task = userData?.tasks?.find((t) => t._id === taskId);
+    if (!task) return;
+    const nextDone = !task.done;
+
     setUserData((prev) => ({
       ...prev,
-      tasks: prev.tasks.map((task) =>
-        task._id === taskId ? { ...task, done: !task.done } : task
+      tasks: prev.tasks.map((t) =>
+        t._id === taskId ? { ...t, done: nextDone } : t
       ),
     }));
+
+    try {
+      await Client.patch(`/tasks/${taskId}/done`, { done: nextDone });
+    } catch {
+      setUserData((prev) => ({
+        ...prev,
+        tasks: prev.tasks.map((t) =>
+          t._id === taskId ? { ...t, done: task.done } : t
+        ),
+      }));
+    }
   };
 
-  const toggleListDone = (listId) => {
+  const toggleListDone = async (listId) => {
+    const list = userData?.lists?.find((l) => l._id === listId);
+    if (!list) return;
+    const nextDone = !list.done;
+
     setUserData((prev) => ({
       ...prev,
-      lists: prev.lists.map((list) =>
-        list._id === listId ? { ...list, done: !list.done } : list
+      lists: prev.lists.map((l) =>
+        l._id === listId ? { ...l, done: nextDone } : l
       ),
     }));
-  };
 
-  //For AI
+    try {
+      await Client.patch(`/lists/${listId}/done`, { done: nextDone });
+    } catch {
+      setUserData((prev) => ({
+        ...prev,
+        lists: prev.lists.map((l) =>
+          l._id === listId ? { ...l, done: list.done } : l
+        ),
+      }));
+    }
+  };
 
   const extractTaskFromText = async (text) => {
     try {
-      await Client.post("/aiAddTask", {
-        text: text,
-      });
-      const updated = await Client.get("/me");
-      const { user, tasks, lists } = updated.data;
-      setUserData({ user, tasks, lists });
+      await Client.post("/aiAddTask", { text });
+      await refreshUserData();
       return "task created!!";
     } catch (err) {
       console.log(err);
-      return "AI is down now!!"
+      return "AI is down now!!";
     }
   };
 
   const handleSuggestions = async (text) => {
     try {
-      const res = await Client.post("/suggestions", {
-        text,
-      });
-      console.log(res.data);
+      const res = await Client.post("/suggestions", { text });
       return res.data;
     } catch (error) {
       console.log(error);
-      return "AI Agent down😓"
+      return "AI Agent down😓";
     }
   };
 

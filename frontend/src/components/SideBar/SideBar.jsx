@@ -156,9 +156,7 @@ export default function SideBar() {
         <TaskPopupForm
           open={showForm}
           setOpen={setShowForm}
-          onAdd={({ title, due }) =>
-            handleAddTask({ title, due, userId: userData.user._id })
-          }
+          onAdd={({ title, due }) => handleAddTask({ title, due })}
         />
       </div>
 

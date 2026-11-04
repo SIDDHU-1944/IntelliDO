@@ -175,11 +175,14 @@ export default function AllTasks() {
                     </div>
           </div>
         <hr />
-        {Object.entries(grouped).map(([dateStr, { tasks, lists }]) => (
+        {Object.entries(grouped).map(([dateStr, { tasks, lists }]) => {
+          const headerDate =
+            tasks[0]?.due ?? lists[0]?.due ?? dateStr;
+          return (
           <div key={dateStr} className={styles.dayRow}>
             <div className={styles.dayCard}>
               <h3>
-                {days[new Date(tasks[0].due).getDay()]} ({dateStr})
+                {days[new Date(headerDate).getDay()]} ({dateStr})
               </h3>
               <div className={styles.taskContainer}>
                 <ul>
@@ -263,7 +266,8 @@ export default function AllTasks() {
             </div>
             <hr />
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

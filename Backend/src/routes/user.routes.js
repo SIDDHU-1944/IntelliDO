@@ -1,5 +1,16 @@
 import { Router } from "express";
-import { login, logout, register, getUser, addTask, addList, handleAITask, AIsuggestions } from "../controllers/user.controller.js";
+import {
+  login,
+  logout,
+  register,
+  getUser,
+  addTask,
+  addList,
+  handleAITask,
+  AIsuggestions,
+  updateTaskDone,
+  updateListDone,
+} from "../controllers/user.controller.js";
 import { requireAuth, progress } from "../../middleware.js";
 
 
@@ -11,6 +22,8 @@ router.route("/logout").post(requireAuth ,logout);
 router.route("/me").get(requireAuth, getUser);
 router.route("/addTask").post(requireAuth, addTask);
 router.route("/addList").post(requireAuth, addList);
+router.route("/tasks/:taskId/done").patch(requireAuth, updateTaskDone);
+router.route("/lists/:listId/done").patch(requireAuth, updateListDone);
 router.route("/aiAddTask").post(requireAuth, handleAITask);
 router.route("/suggestions").post(requireAuth, AIsuggestions);
 router.route("/getProgress").get(progress, (req, res) => {

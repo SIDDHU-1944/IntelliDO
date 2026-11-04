@@ -66,7 +66,7 @@ export default function Home() {
     // Set total and completed counts (customize as needed)
     setTasks(todayTasks.length + todayLists.length);
     setCount(doneTasks + doneLists);
-  }, [userData, date]);
+  }, [userData]);
 
   //chart
   useEffect(() => {

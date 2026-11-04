@@ -91,16 +91,6 @@ const progress = async (req, res, next) => {
         },
       });
 
-      // Delete yesterday's tasks and lists
-      const yTaskIds = yTasks.map((t) => t._id);
-      const yListIds = yLists.map((l) => l._id);
-
-      await Task.deleteMany({ _id: { $in: yTaskIds } });
-      await List.deleteMany({ _id: { $in: yListIds } });
-
-      console.log(
-        `🗑️ Deleted ${yTaskIds.length} tasks and ${yListIds.length} lists for ${yesterday}`
-      );
     }
     req.user = user;
     req.lists = lists;
