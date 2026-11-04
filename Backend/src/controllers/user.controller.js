@@ -1,10 +1,9 @@
 import { User } from "../models/user.model.js";
 import { Task, List } from "../models/tasks.model.js";
-import bcrypt, { hash } from "bcrypt";
+import bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import jwt from "jsonwebtoken";
 import { extractTask, getAutoCompletions } from "../../AI.js";
-import { response } from "express";
 
 const login = async (req, res) => {
   let { username, password } = req.body;
@@ -56,7 +55,7 @@ const register = async (req, res) => {
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res
-        .status(httpStatus.FOUND)
+        .status(httpStatus.CONFLICT)
         .json({ message: "user already exists" });
     }
 
@@ -98,16 +97,19 @@ const getUser = async (req, res) => {
 // tasks:
 
 const addTask = async (req, res) => {
-  let { title, time, done, userId, category } = req.body;
-  // console.log(req.body);
-  // console.log(title, time, done, userId);
+  let { title, time, done, category } = req.body;
+  if (!title || !time) {
+    return res
+      .status(httpStatus.BAD_REQUEST)
+      .json({ message: "title and time are required" });
+  }
   try {
     const newTask = new Task({
       text: title,
       due: time,
       done: done ? done : false,
-      userId: userId,
-      category:category? category: "undefined"
+      userId: req.userId,
+      category: category ? category : "undefined",
     });
 
     await newTask.save();
@@ -119,14 +121,19 @@ const addTask = async (req, res) => {
 };
 
 const addList = async (req, res) => {
-  let { title, items, due, done, userId } = req.body;
+  let { title, items, due, done } = req.body;
+  if (!title || !due) {
+    return res
+      .status(httpStatus.BAD_REQUEST)
+      .json({ message: "title and due are required" });
+  }
   try {
     const newList = new List({
       title,
       items,
       due,
       done: done ? done : false,
-      userId,
+      userId: req.userId,
     });
 
     await newList.save();
@@ -153,32 +160,95 @@ const getQuote = async () => {
 
 //aiTaskAddition
 
-const handleAITask = async (req,res) => {
+const handleAITask = async (req, res) => {
   try {
     const { text } = req.body;
     if (!text) return res.status(400).json({ error: "Text is required" });
-    // console.log("userid:", req.user.id);
     const result = await extractTask(text);
     if (!result) return res.status(500).json({ error: "Failed to extract task" });
 
-    // result: { task, due, category }
-    const newTask = new Task({
-      text: result.task,
-      due: result.due,
-      done: false,
-      userId: req.user.id,
-      category: result.category || "undefined"
-    });
-    await newTask.save();
-    
-    res.status(201).json({ message: "AI task created", task: newTask });
+    const due = result.due ? new Date(result.due) : new Date();
+    const category = result.category || "undefined";
+    const userId = req.userId;
 
-    // console.log(result);
+    const taskTexts = [];
+    if (Array.isArray(result.taskItems) && result.taskItems.length > 0) {
+      for (const item of result.taskItems) {
+        if (item?.task) taskTexts.push(item.task);
+      }
+    }
+    const singleText = result.task || result.title;
+    if (singleText) taskTexts.push(singleText);
+    if (taskTexts.length === 0) {
+      return res.status(500).json({ error: "Failed to extract task text" });
+    }
+
+    const created = [];
+    for (const taskText of taskTexts) {
+      const newTask = new Task({
+        text: taskText,
+        due,
+        done: false,
+        userId,
+        category,
+      });
+      await newTask.save();
+      created.push(newTask);
+    }
+
+    res.status(201).json({
+      message: created.length > 1 ? "AI tasks created" : "AI task created",
+      tasks: created,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: err.message });
   }
-}
+};
+
+const updateTaskDone = async (req, res) => {
+  const { done } = req.body;
+  if (typeof done !== "boolean") {
+    return res
+      .status(httpStatus.BAD_REQUEST)
+      .json({ message: "done must be a boolean" });
+  }
+  try {
+    const task = await Task.findOneAndUpdate(
+      { _id: req.params.taskId, userId: req.userId },
+      { done },
+      { new: true }
+    );
+    if (!task) {
+      return res.status(httpStatus.NOT_FOUND).json({ message: "task not found" });
+    }
+    res.json({ task });
+  } catch (error) {
+    res.json({ message: `something went wrong ${error}` });
+  }
+};
+
+const updateListDone = async (req, res) => {
+  const { done } = req.body;
+  if (typeof done !== "boolean") {
+    return res
+      .status(httpStatus.BAD_REQUEST)
+      .json({ message: "done must be a boolean" });
+  }
+  try {
+    const list = await List.findOneAndUpdate(
+      { _id: req.params.listId, userId: req.userId },
+      { done },
+      { new: true }
+    );
+    if (!list) {
+      return res.status(httpStatus.NOT_FOUND).json({ message: "list not found" });
+    }
+    res.json({ list });
+  } catch (error) {
+    res.json({ message: `something went wrong ${error}` });
+  }
+};
 
 const AIsuggestions = async(req,res)=>{
   try {
@@ -192,4 +262,16 @@ const AIsuggestions = async(req,res)=>{
   }
 }
 
-export { login, register, logout, getUser, addTask, addList, getQuote, handleAITask, AIsuggestions };
+export {
+  login,
+  register,
+  logout,
+  getUser,
+  addTask,
+  addList,
+  getQuote,
+  handleAITask,
+  AIsuggestions,
+  updateTaskDone,
+  updateListDone,
+};

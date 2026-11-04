@@ -87,12 +87,13 @@ async function extractTask(text) {
     return null;
   }
 
-  const resultText = response.body.choices[0].message.content;
+  const resultText = response.body.choices[0].message.content.trim();
+  const jsonText = resultText.replace(/^```(?:json)?\s*|\s*```$/g, "");
 
   // console.log("🧠 Raw model response:", resultText);
 
   try {
-    const structured = JSON.parse(resultText);
+    const structured = JSON.parse(jsonText);
     console.log("✅ Extracted Task:", structured);
     if (!allowedCategories.includes(structured.category)) {
       structured.category = "uncategorized";
@@ -149,12 +150,13 @@ async function getAutoCompletions(text) {
     return null;
   }
 
-  const resultText = response.body.choices[0].message.content;
+  const resultText = response.body.choices[0].message.content.trim();
+  const jsonText = resultText.replace(/^```(?:json)?\s*|\s*```$/g, "");
 
   console.log("🧠 Raw model response:", resultText);
 
   try {
-    return JSON.parse(resultText);
+    return JSON.parse(jsonText);
   } catch (err) {
     // Try to extract JSON array from text
     const match = resultText.match(/\[.*\]/s);

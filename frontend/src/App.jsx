@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import LandingPage from "./pages/landingPage";
 import SignIn from "./pages/SignIn";
@@ -52,6 +52,7 @@ function App() {
               }
             ></Route>
 
+            <Route path="/home" element={<Navigate to="/Home" replace />} />
             <Route path="/register" element={<SignUp />}></Route>
           </Routes>
         </AuthProvider>
